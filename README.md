@@ -24,3 +24,4 @@ Si tenes instalado nwjs, lo mejor es lanzar el comando
 activar el modo livereload.
 
 En cambio, si usas *chrome*, usá el comando ``make server`` y listo :)
+# huayra-tiempo
