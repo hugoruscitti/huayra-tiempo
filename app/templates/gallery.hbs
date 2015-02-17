@@ -1,0 +1,16 @@
+<div class="row">
+  {{#link-to "index" class="btn btn-normal"}}Regresar{{/link-to}}
+</div>
+
+
+<div class="row">
+
+  <ul>
+    {{#each m in model}}
+      <li>{{#link-to "edit" m}}{{m.titulo}} (creado por {{m.autor}}){{/link-to}} <button {{action 'borrar' m}}class='btn btn-xs btn-danger'>borrar</button></li>
+    {{else}}
+      <p>No se han creado lineas de tiempo aún.</p>
+    {{/each}}
+  </ul>
+
+</div>

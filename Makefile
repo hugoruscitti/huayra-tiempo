@@ -15,6 +15,7 @@ comandos:
 	@echo "    ${G}iniciar${N}         Instala dependencias."
 	@echo "    ${G}compilar${N}        Genera los archivos compilados."
 	@echo "    ${G}compilar_live${N}   Compila de forma contínua."
+	@echo "    ${G}actualizar_css${N}  Instala/actualiza huayra-liso."
 	@echo ""
 	@echo "    ${G}ejecutar_linux${N}  Prueba la aplicacion sobre Huayra."
 	@echo "    ${G}ejecutar_mac${N}    Prueba la aplicacion sobre OSX."
@@ -37,6 +38,10 @@ ejecutar_linux:
 
 ejecutar_mac:
 	/Applications/nwjs.app/Contents/MacOS/nwjs dist
+
+actualizar_css:
+	cp -r -f ../huayra-bootstrap-liso/destino/ public/huayra-liso
+	rm public/huayra-liso/index.html
 
 test_mac: ejecutar_mac
 
