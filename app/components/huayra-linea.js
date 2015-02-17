@@ -89,7 +89,7 @@ export default Ember.Component.extend({
             self.timeline = timeline;
 
             function onRangeChanged(properties) {
-              console.log(properties.start + ' - ' + properties.end + '<br>');
+              console.log(properties.start + ' ---- ' + properties.end);
             }
 
             links.events.addListener(self.timeline, 'rangechanged', onRangeChanged);
@@ -107,7 +107,7 @@ export default Ember.Component.extend({
               console.log(row);
 
               // luego de cambiar cosas, se puede llamar a:
-              timeline.changeItem(5, {content: "hugo"})
+              timeline.changeItem(row, {content: "hugo"})
               // donde 5 es el valor 'row', y lo demás con las propiedades que se quieren
               // re-definir.
 
@@ -138,5 +138,13 @@ export default Ember.Component.extend({
       this.timeline.trigger("rangechange");
       this.timeline.trigger("rangechanged");
     },
+    capture: function() {
+      html2canvas($('#timeline'), {
+        onrendered: function(canvas) {
+          var img = canvas.toDataURL()
+          window.open(img);
+        }
+      });
+    }
   }
 });
