@@ -1,5 +1,34 @@
 import Ember from 'ember';
 
+
+if (typeof links === 'undefined') {
+    links = {};
+    links.locales = {};
+} else if (typeof links.locales === 'undefined') {
+    links.locales = {};
+}
+
+// Spanish ===================================================
+links.locales['es'] = {
+    'MONTHS': ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+    'MONTHS_SHORT': ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+    'DAYS': ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+    'DAYS_SHORT': ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"],
+    'ZOOM_IN': "Aumentar zoom",
+    'ZOOM_OUT': "Disminuir zoom",
+    'MOVE_LEFT': "Mover izquierda",
+    'MOVE_RIGHT': "Mover derecha",
+    'NEW': "Nuevo",
+    'CREATE_NEW_EVENT': "Crear nuevo evento"
+};
+
+links.locales['es_ES'] = links.locales['es'];
+
+
+
+
+
+
 export default Ember.Component.extend({
   timeline: null,
 
@@ -14,6 +43,7 @@ export default Ember.Component.extend({
             data = [
                 {
                     'start': new Date(2012,7,19),
+                    'end': new Date(2012,9,19),
                     'content': 'default'
                 },
                 {
@@ -48,6 +78,7 @@ export default Ember.Component.extend({
               axisOnTop: false,
               //showNavigation: true,
               //showButtonNew: true,
+              locale: 'es'
             };
 
             // Instantiate our table object.
@@ -57,6 +88,36 @@ export default Ember.Component.extend({
             timeline.draw(data);
             self.timeline = timeline;
 
+            function onRangeChanged(properties) {
+              console.log(properties.start + ' - ' + properties.end + '<br>');
+            }
+
+            links.events.addListener(self.timeline, 'rangechanged', onRangeChanged);
+
+            function onSelect() {
+              var row = [];
+              var sel = timeline.getSelection();
+              if (sel.length) {
+                if (sel[0].row != undefined) {
+                  var row = sel[0].row;
+                }
+              }
+
+              // row será el numero de item en la lista 'data'
+              console.log(row);
+
+              // luego de cambiar cosas, se puede llamar a:
+              timeline.changeItem(5, {content: "hugo"})
+              // donde 5 es el valor 'row', y lo demás con las propiedades que se quieren
+              // re-definir.
+
+
+            }
+
+            links.events.addListener(self.timeline, 'select', onSelect);
+
+            window.timeline = self.timeline;
+            window.data = data;
         }
 
         drawVisualization();

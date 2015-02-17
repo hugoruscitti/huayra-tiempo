@@ -63,3 +63,12 @@ div.timeline-event-selected {
     color: black;
     box-shadow: 0 0 10px gray;
 }
+
+
+div#timeline {
+  background-color: #FAFAFA;
+}
+
+div.timeline-event {
+  cursor: pointer;
+}
