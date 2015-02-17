@@ -1,3 +1,65 @@
 html, body {
   margin: 20px;
 }
+
+body {
+    font: 14pt arial;
+}
+
+input {
+    font: 14pt arial;
+}
+
+/* custom styles for individual items, load this after timeline.css */
+
+div.timeline-event.green {
+    background-color: greenyellow;
+    border-color: green;
+}
+
+/* create a custom sized dot at the bottom of the red item */
+div.timeline-event.red {
+    background-color: red;
+    border-color: darkred;
+    color: white;
+    font-family: monospace;
+    box-shadow: 0 0 10px gray;
+}
+div.timeline-event-dot.red {
+    border-radius: 10px;
+    border-width: 10px;
+}
+div.timeline-event-line.red {
+    border-width: 5px;
+}
+div.timeline-event-box.red {
+    border-radius: 0;
+    border-width: 2px;
+    font-size: 24pt;
+    font-weight: bold;
+}
+
+div.timeline-event.orange {
+    background-color: gold;
+    border-color: orange;
+}
+div.timeline-event-selected.orange {
+    /* custom colors for selected orange items */
+    background-color: orange;
+    border-color: orangered;
+}
+
+div.timeline-event.magenta {
+    background-color: magenta;
+    border-color: purple;
+    color: white;
+}
+
+/* our custom classes overrule the styles for selected events,
+   so lets define a new style for the selected events */
+div.timeline-event-selected {
+    background-color: white;
+    border-color: black;
+    color: black;
+    box-shadow: 0 0 10px gray;
+}

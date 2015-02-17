@@ -1,9 +1,12 @@
 import Ember from 'ember';
 
 export default Ember.Component.extend({
+  timeline: null,
+
   iniciar: function() {
         var timeline;
         var data;
+        var self = this;
 
         // Called when the page is loaded
         function drawVisualization() {
@@ -38,7 +41,13 @@ export default Ember.Component.extend({
 
             // specify options
             var options = {
-                //'editable': true
+              width: "100%",
+              height: "400px",
+              //editable: true,   // enable dragging and editing events
+              enableKeys: true,
+              axisOnTop: false,
+              //showNavigation: true,
+              //showButtonNew: true,
             };
 
             // Instantiate our table object.
@@ -46,10 +55,27 @@ export default Ember.Component.extend({
 
             // Draw our table with the data we created locally.
             timeline.draw(data);
+            self.timeline = timeline;
+
         }
 
         drawVisualization();
 
+  }.on('didInsertElement'),
 
-  }.on('didInsertElement')
+  actions: {
+    zoomOut: function() {
+      this.timeline.zoom(-0.5);
+      this.timeline.trigger("rangechange");
+      this.timeline.trigger("rangechanged");
+    },
+    zoomReset: function() {
+      this.timeline.setVisibleChartRangeAuto();
+    },
+    zoomIn: function() {
+      this.timeline.zoom(0.5);
+      this.timeline.trigger("rangechange");
+      this.timeline.trigger("rangechanged");
+    },
+  }
 });
