@@ -1,3 +1,24 @@
+<div class="row">
+  <a href class='btn btn-normal' {{action "guardarYRegresar"}}> Guardar y regresar</a>
+  <h3 {{action "cambiarTitulo"}} class='titulo'>{{lineaModel.titulo}}</h3>
+</div>
+
+{{#modal-form id="titulo-form" on-submit="guardar" on-cancel="cancelar"}}
+
+{{#modal-title}}Cambiando el título{{/modal-title}}
+
+<div class="form-group">
+  <label class="control-label" for="focusedInput">Título</label>
+  {{input class='form-control' id="name" autofocus=true value=lineaModel.titulo}}
+</div>
+
+<div class='modal-buttons'>
+  <button class='btn btn-normal' type="submit">Guardar</button>
+</div>
+
+{{/modal-form}}
+
+
 <div class="row botonesEdicion">
   <button class="btn btn-normal" {{action 'crearEvento'}}> <i class='glyphicon glyphicon-plus'></i> Crear un evento</button>
   ||
@@ -9,7 +30,6 @@
 </div>
 
 <div id='timeline' class='row'>
-  hola??
 </div>
 
 
@@ -18,7 +38,11 @@
 
 {{#modal-form id="evento-form" on-submit="guardarEventoForm" on-cancel="cancelarEventoForm"}}
 
-  {{#modal-title}}Evento{{/modal-title}}
+  {{#if model.edicion}}
+    {{#modal-title}}Edición de un Evento{{/modal-title}}
+  {{else}}
+    {{#modal-title}}Creación de un nuevo Evento{{/modal-title}}
+  {{/if}}
 
   <div class="form-group">
     <label class="control-label" for="titulo">Título</label>
@@ -42,7 +66,11 @@
   </div>
 
   <div class='modal-buttons'>
-    <button class='btn btn-normal' type="submit">Guardar</button>
+    {{#if model.edicion}}
+      <button class='btn btn-normal' type="submit">Guardar</button>
+    {{else}}
+      <button class='btn btn-normal' type="submit">Crear</button>
+    {{/if}}
   </div>
 
 {{/modal-form}}

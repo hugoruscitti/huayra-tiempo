@@ -25,11 +25,26 @@ links.locales['es_ES'] = links.locales['es'];
 
 export default Ember.Component.extend({
   timeline: null,
+  needs: 'edit',
 
   iniciar: function() {
         var timeline;
         var data = [];
         var self = this;
+
+        var model = this.get('lineaModel');
+        var datos = model.get('datos_json');
+
+        if (datos) {
+          data = JSON.parse(datos);
+
+          for (var i=0; i<data.length; i++) {
+            data[i].start = new Date(data[i].start);
+          }
+        } else {
+          console.log("el archivo vacio");
+        }
+
 
         function drawVisualization() {
             var options = {
@@ -86,6 +101,18 @@ export default Ember.Component.extend({
 
   actions: {
 
+      cambiarTitulo: function() {
+        this.set('modal', Em.View.views['titulo-form']);
+        this.get('modal').toggleVisibility(this, {focus: true});
+      },
+      guardar: function(modal, event) {
+      },
+      cancelar: function() {
+      },
+
+
+
+
     crearEvento: function() {
       this.set('model', {fecha: '01/01/2012',
                          titulo: 'Evento',
@@ -101,8 +128,22 @@ export default Ember.Component.extend({
       this.set('modal', Em.View.views['evento-form']);
       this.get('modal').toggleVisibility(this, {focus: true});
     },
-    editarEvento: function(item) {
-      alert(item);
+    editarEvento: function(data) {
+      this.set('model', {fecha: data.item.start,
+                         titulo: data.item.content,
+                         row: data.row,
+                         edicion: true,
+                         clases: [
+                            {id: 1, text:"default"},
+                            {id: 2, text:"naranja"},
+                            {id: 3, text:"verde"},
+                            {id: 4, text:"rojo"},
+                          ],
+                          clase: {id: 1, text: data.item.className},
+                        });
+
+      this.set('modal', Em.View.views['evento-form']);
+      this.get('modal').toggleVisibility(this, {focus: true});
     },
     guardarEventoForm: function(modal, event) {
       var model = this.get('model');
@@ -111,13 +152,28 @@ export default Ember.Component.extend({
       if (model.clase)
         clase = model.clase.text;
 
-      var nuevoEvento = {
-        'start': new Date(model.fecha),
-        'content': model.titulo,
-        'className': clase
-      };
+      if (model.edicion) {
+        var row = model.row;
 
-      timeline.addItem(nuevoEvento);
+        var eventoModificado = {
+          'start': new Date(model.fecha),
+          'content': model.titulo,
+          'className': clase
+        };
+
+        timeline.changeItem(row, eventoModificado);
+
+      } else {
+        var nuevoEvento = {
+          'start': new Date(model.fecha),
+          'content': model.titulo,
+          'className': clase
+        };
+
+        timeline.addItem(nuevoEvento);
+        timeline.setSelection([]);
+      }
+
       this.send('zoomReset');
       this.send('zoomOut');
     },
@@ -160,6 +216,12 @@ export default Ember.Component.extend({
       });
 
       $("#saveInput").trigger('click');
+    },
+
+    guardarYRegresar: function() {
+      var record = this.get('lineaModel');
+      record.set('datos_json', JSON.stringify(this.timeline.data));
+      record.save();
     }
   }
 });

@@ -4,8 +4,10 @@
   "version": "0.0.1",
   "window": {
     "title": "huayra-tiempo",
-    "width": 800,
+    "width": 900,
     "height": 500,
+    "min_width": 900,
+    "min_height": 500,
     "toolbar": true,
     "position": "center"
   }

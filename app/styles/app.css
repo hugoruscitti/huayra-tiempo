@@ -126,3 +126,8 @@ modal-container, .modal-form {
   margin-top: -16px;
   margin-left: 17px;
 }
+
+
+modal-container, .modal-form {
+  z-index: 2000;
+}
