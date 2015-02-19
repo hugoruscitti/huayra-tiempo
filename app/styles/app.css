@@ -12,48 +12,43 @@ input {
 
 /* custom styles for individual items, load this after timeline.css */
 
-div.timeline-event.green {
+div.timeline-event.verde {
     background-color: greenyellow;
     border-color: green;
 }
 
 /* create a custom sized dot at the bottom of the red item */
-div.timeline-event.red {
+div.timeline-event.rojo {
     background-color: red;
     border-color: darkred;
     color: white;
     font-family: monospace;
     box-shadow: 0 0 10px gray;
 }
-div.timeline-event-dot.red {
+div.timeline-event-dot.rojo {
     border-radius: 10px;
     border-width: 10px;
 }
-div.timeline-event-line.red {
+div.timeline-event-line.rojo {
     border-width: 5px;
 }
-div.timeline-event-box.red {
+div.timeline-event-box.rojo {
     border-radius: 0;
     border-width: 2px;
     font-size: 24pt;
     font-weight: bold;
 }
 
-div.timeline-event.orange {
+div.timeline-event.naranja {
     background-color: gold;
     border-color: orange;
 }
-div.timeline-event-selected.orange {
+div.timeline-event-selected.naranja {
     /* custom colors for selected orange items */
     background-color: orange;
     border-color: orangered;
 }
 
-div.timeline-event.magenta {
-    background-color: magenta;
-    border-color: purple;
-    color: white;
-}
 
 /* our custom classes overrule the styles for selected events,
    so lets define a new style for the selected events */
@@ -120,4 +115,14 @@ modal-container, .modal-form {
 .table-container {
   margin: 10px;
   border: 2px solid rgb(221, 221, 221);
+}
+
+.form-control-expandido {
+  height: 54px !important;
+}
+
+
+.select2-drop {
+  margin-top: -16px;
+  margin-left: 17px;
 }

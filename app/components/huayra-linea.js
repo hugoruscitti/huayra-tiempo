@@ -1,6 +1,5 @@
 import Ember from 'ember';
 
-
 if (typeof links === 'undefined') {
     links = {};
     links.locales = {};
@@ -24,79 +23,31 @@ links.locales['es'] = {
 
 links.locales['es_ES'] = links.locales['es'];
 
-
-
-
-
-
 export default Ember.Component.extend({
   timeline: null,
 
   iniciar: function() {
         var timeline;
-        var data;
+        var data = [];
         var self = this;
 
-
-
-        // Called when the page is loaded
         function drawVisualization() {
-            // Create and populate a data table.
-            data = [
-                {
-                    'start': new Date(2012,7,19),
-                    'end': new Date(2012,9,19),
-                    'content': 'default'
-                },
-                {
-                    'start': new Date(2012,7,23),
-                    'content': 'green',
-                    'className': 'green'
-                },
-                {
-                    'start': new Date(2012,7,29),
-                    'content': 'red',
-                    'className': 'red'
-                },
-                {
-                    'start': new Date(2012,7,27),
-                    'end': new Date(2012,8,1),
-                    'content': 'orange',
-                    'className': 'orange'
-                },
-                {
-                    'start': new Date(2012,8,2),
-                    'content': 'magenta',
-                    'className': 'magenta'
-                }
-            ];
-
-            // specify options
             var options = {
               width: "100%",
               height: "100%",
-              //editable: true,   // enable dragging and editing events
               enableKeys: true,
               axisOnTop: false,
               autoResize: true,
               align: 'left',
-              //showNavigation: true,
-              //showButtonNew: true,
+              zoomMin: 1000 * 60 * 60 * 24,
+              showCurrentTime: false,
               locale: 'es'
             };
 
-            // Instantiate our table object.
             timeline = new links.Timeline(document.getElementById('timeline'), options);
 
-            // Draw our table with the data we created locally.
             timeline.draw(data);
             self.timeline = timeline;
-
-            function onRangeChanged(properties) {
-              //console.log(properties.start + ' ---- ' + properties.end);
-            }
-
-            links.events.addListener(self.timeline, 'rangechanged', onRangeChanged);
 
             window.onresize = function() {
               if (self.timeline !== undefined)
@@ -104,22 +55,19 @@ export default Ember.Component.extend({
             };
 
             function onSelect() {
-              var row = [];
+              var row = undefined;
               var sel = timeline.getSelection();
+
               if (sel.length) {
                 if (sel[0].row != undefined) {
                   var row = sel[0].row;
                 }
               }
 
-              // row será el numero de item en la lista 'data'
-              console.log(row);
-
-              // luego de cambiar cosas, se puede llamar a:
-              timeline.changeItem(row, {content: "hugo"})
-              // donde 5 es el valor 'row', y lo demás con las propiedades que se quieren
-              // re-definir.
-
+              if (row !== undefined) {
+                var item = timeline.getItem(row);
+                self.send('editarEvento', {row: row, item: item});
+              }
 
             }
 
@@ -133,9 +81,51 @@ export default Ember.Component.extend({
 
   }.on('didInsertElement'),
 
+  focus: function() {
+  },
+
   actions: {
+
+    crearEvento: function() {
+      this.set('model', {fecha: '01/01/2012',
+                         titulo: 'Evento',
+                         edicion: false,
+                         clases: [
+                          {id: 1, text:"default"},
+                          {id: 2, text:"naranja"},
+                          {id: 3, text:"verde"},
+                          {id: 4, text:"rojo"},
+                         ]
+                      });
+
+      this.set('modal', Em.View.views['evento-form']);
+      this.get('modal').toggleVisibility(this, {focus: true});
+    },
+    editarEvento: function(item) {
+      alert(item);
+    },
+    guardarEventoForm: function(modal, event) {
+      var model = this.get('model');
+      var clase = "default";
+
+      if (model.clase)
+        clase = model.clase.text;
+
+      var nuevoEvento = {
+        'start': new Date(model.fecha),
+        'content': model.titulo,
+        'className': clase
+      };
+
+      timeline.addItem(nuevoEvento);
+      this.send('zoomReset');
+      this.send('zoomOut');
+    },
+    cancelarEventoForm: function() {
+    },
+
     zoomOut: function() {
-      this.timeline.zoom(-0.5);
+      this.timeline.zoom(-0.3);
       this.timeline.trigger("rangechange");
       this.timeline.trigger("rangechanged");
     },
@@ -143,12 +133,12 @@ export default Ember.Component.extend({
       this.timeline.setVisibleChartRangeAuto();
     },
     zoomIn: function() {
-      this.timeline.zoom(0.5);
+      this.timeline.zoom(0.3);
       this.timeline.trigger("rangechange");
       this.timeline.trigger("rangechanged");
     },
-    capture: function() {
 
+    capture: function() {
       $("#saveInput").change(function(evt) {
         var nombre_archivo = $(this).val();
 
@@ -170,7 +160,6 @@ export default Ember.Component.extend({
       });
 
       $("#saveInput").trigger('click');
-
     }
   }
 });

@@ -1,5 +1,5 @@
 <div class="row botonesEdicion">
-  <button class="btn btn-normal"> <i class='glyphicon glyphicon-plus'></i> Crear un evento</button>
+  <button class="btn btn-normal" {{action 'crearEvento'}}> <i class='glyphicon glyphicon-plus'></i> Crear un evento</button>
   ||
   <button class='btn btn-normal' {{action 'zoomOut'}}> <i class='glyphicon glyphicon-zoom-out'></i> </button>
   <button class='btn btn-normal' {{action 'zoomReset'}}> <i class='glyphicon glyphicon-resize-horizontal'></i> </button>
@@ -14,3 +14,35 @@
 
 
 <input id='saveInput' type="file" nwsaveas="linea_de_tiempo.png" />
+
+
+{{#modal-form id="evento-form" on-submit="guardarEventoForm" on-cancel="cancelarEventoForm"}}
+
+  {{#modal-title}}Evento{{/modal-title}}
+
+  <div class="form-group">
+    <label class="control-label" for="titulo">Título</label>
+    {{input class='form-control' id="titulo" autofocus=true value=model.titulo}}
+  </div>
+
+  <div class="form-group">
+    <label class="control-label" for="fecha">Fecha</label>
+    {{bootstrap-datepicker class='form-control' id='fecha' todayHighlight=true weekStart=1 language="es" value=model.fecha}}
+  </div>
+
+
+  <div class="form-group">
+    <label class="control-label" for="clase">Clase</label>
+    {{select-2
+      class='form-control-expandido'
+      content=model.clases
+      placeholder="Seleccioná una clase"
+      value=model.clase
+    }}
+  </div>
+
+  <div class='modal-buttons'>
+    <button class='btn btn-normal' type="submit">Guardar</button>
+  </div>
+
+{{/modal-form}}

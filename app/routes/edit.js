@@ -13,7 +13,8 @@ export default Ember.Route.extend({
     guardar: function(modal, event) {
     },
     cancelar: function() {
-    }
+    },
+
   },
 
   focus: function() {
