@@ -5,5 +5,10 @@ export default Ember.Route.extend({
     return this.store.find('linea', params.id);
   },
 
+  actions: {
+    regresar: function() {
+      this.transitionTo('index');
+    }
+  }
 
 });

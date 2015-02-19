@@ -222,6 +222,7 @@ export default Ember.Component.extend({
       var record = this.get('lineaModel');
       record.set('datos_json', JSON.stringify(this.timeline.data));
       record.save();
+      this.sendAction('regresar');
     }
   }
 });
