@@ -67,8 +67,57 @@ div.timeline-event-selected {
 
 div#timeline {
   background-color: #FAFAFA;
+  top: 70px;
+  bottom: 10px;
+  position: absolute;
+  left: 20px;
+  right: 20px;
 }
 
 div.timeline-event {
   cursor: pointer;
+}
+
+modal-container, .modal-form {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+
+.botones {
+  margin: 10px;
+}
+
+.modal-buttons {
+  border-top: 1px solid darkgray;
+  padding-top: 10px;
+  margin-top: 10px;
+  text-align: right;
+}
+
+#saveInput {
+  display: none;
+}
+
+
+.titulo {
+  display: inline-block;
+  margin: 0;
+  cursor: pointer;
+}
+
+.titulo:hover {
+  background-color: lightgrey;
+}
+
+.botonesEdicion {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  position: absolute;
+  right: 30px;
+  top: 18px;
+}
+
+.table-container {
+  margin: 10px;
+  border: 2px solid rgb(221, 221, 221);
 }

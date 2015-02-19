@@ -37,6 +37,8 @@ export default Ember.Component.extend({
         var data;
         var self = this;
 
+
+
         // Called when the page is loaded
         function drawVisualization() {
             // Create and populate a data table.
@@ -72,10 +74,12 @@ export default Ember.Component.extend({
             // specify options
             var options = {
               width: "100%",
-              height: "400px",
+              height: "100%",
               //editable: true,   // enable dragging and editing events
               enableKeys: true,
               axisOnTop: false,
+              autoResize: true,
+              align: 'left',
               //showNavigation: true,
               //showButtonNew: true,
               locale: 'es'
@@ -89,10 +93,15 @@ export default Ember.Component.extend({
             self.timeline = timeline;
 
             function onRangeChanged(properties) {
-              console.log(properties.start + ' ---- ' + properties.end);
+              //console.log(properties.start + ' ---- ' + properties.end);
             }
 
             links.events.addListener(self.timeline, 'rangechanged', onRangeChanged);
+
+            window.onresize = function() {
+              if (self.timeline !== undefined)
+                self.timeline.redraw();
+            };
 
             function onSelect() {
               var row = [];
@@ -139,12 +148,29 @@ export default Ember.Component.extend({
       this.timeline.trigger("rangechanged");
     },
     capture: function() {
-      html2canvas($('#timeline'), {
-        onrendered: function(canvas) {
-          var img = canvas.toDataURL()
-          window.open(img);
-        }
+
+      $("#saveInput").change(function(evt) {
+        var nombre_archivo = $(this).val();
+
+        html2canvas($('#timeline'), {
+          onrendered: function(canvas) {
+            var data = canvas.toDataURL()
+            var base64Data = data.replace(/^data:image\/png;base64,/, "");
+
+            require("fs").writeFile(nombre_archivo, base64Data, 'base64', function(err) {
+              if (err) {
+                alert("Error " + err);
+              }
+
+            });
+          }
+        });
+
+        $(this).val('');
       });
+
+      $("#saveInput").trigger('click');
+
     }
   }
 });

@@ -1,9 +1,22 @@
 <div class="row">
   {{#link-to "index" class='btn btn-normal'}}Regresar{{/link-to}}
+  <h3 {{action "cambiarTitulo"}} class='titulo'>{{titulo}}</h3>
 </div>
-
-<h1>{{titulo}}</h1>
 
 {{#huayra-linea}}{{/huayra-linea}}
 
-{{outlet}}
+
+{{#modal-form id="titulo-form" on-submit="guardar" on-cancel="cancelar"}}
+
+  {{#modal-title}}Cambiando el título{{/modal-title}}
+
+  <fieldset>
+    <label for="name">Titulo</label>
+    {{input id="name" autofocus=true value=model.titulo}}
+  </fieldset>
+
+  <div class='modal-buttons'>
+    <button class='btn btn-normal' type="submit">Guardar</button>
+  </div>
+
+{{/modal-form}}
