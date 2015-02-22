@@ -56,7 +56,7 @@ export default Ember.Component.extend({
               align: 'left',
               zoomMin: 1000 * 60 * 60 * 24,
               showCurrentTime: false,
-              locale: 'es'
+              locale: 'es',
             };
 
             timeline = new links.Timeline(document.getElementById('timeline'), options);
@@ -69,9 +69,90 @@ export default Ember.Component.extend({
                 self.timeline.redraw();
             };
 
+            var parent_handler = timeline.onMouseUp;
+            var parent_handler_md = timeline.onMouseDown;
+
+
+            timeline.onMouseDown = function(event) {
+              timeline.setSelection([]);
+              parent_handler_md.call(timeline, event);
+            };
+
+
+            timeline.onMouseUp = function(event) {
+              parent_handler.call(timeline, event);
+              var selection = timeline.getSelection();
+
+              if (selection.length > 0) {
+                if (selection.length) {
+                  if (selection[0].row != undefined) {
+                    var row = selection[0].row;
+                  }
+                }
+
+                if (row !== undefined) {
+                  var item = timeline.getItem(row);
+                  self.send('editarEvento', {row: row, item: item});
+                }
+
+              }
+            }
+
+            timeline.onDblClick = function(event) {
+              var params = this.eventParams,
+                  options = this.options,
+                  dom = this.dom,
+                  size = this.size;
+              event = event || window.event;
+
+              // get mouse position
+              params.mouseX = links.Timeline.getPageX(event);
+              params.mouseY = links.Timeline.getPageY(event);
+              var x = params.mouseX - links.Timeline.getAbsoluteLeft(dom.content);
+              var y = params.mouseY - links.Timeline.getAbsoluteTop(dom.content);
+
+              // create a new event at the current mouse position
+              var xstart = this.screenToTime(x);
+              if (options.snapEvents) {
+                  this.step.snap(xstart);
+              }
+
+              var content = options.NEW;
+              var group = this.getGroupFromHeight(y);   // (group may be undefined)
+              var preventRender = true;
+
+              self.send('crearEvento', xstart);
+
+              /*
+              this.addItem({
+                  'start': xstart,
+                  'content': "ASDASDASD",
+                  'group': this.getGroupName(group)
+              }, preventRender);
+              */
+
+              params.itemIndex = (this.items.length - 1);
+              this.selectItem(params.itemIndex);
+
+              this.applyAdd = true;
+
+              this.trigger('add');
+
+              if (this.applyAdd) {
+                  this.render({animate: false});
+                  this.selectItem(params.itemIndex);
+              }
+              else {
+                  this.deleteItem(params.itemIndex);
+              }
+
+            };
+
+            /*
             function onSelect() {
               var row = undefined;
               var sel = timeline.getSelection();
+              console.log(sel);
 
               if (sel.length) {
                 if (sel[0].row != undefined) {
@@ -85,8 +166,10 @@ export default Ember.Component.extend({
               }
 
             }
+            */
 
-            links.events.addListener(self.timeline, 'select', onSelect);
+
+            //links.events.addListener(self.timeline, 'select', onSelect);
 
             window.timeline = self.timeline;
             window.data = data;
@@ -113,8 +196,10 @@ export default Ember.Component.extend({
 
 
 
-    crearEvento: function() {
-      this.set('model', {fecha: '01/01/2012',
+    crearEvento: function(fecha) {
+      fecha = fecha || new Date();
+
+      this.set('model', {fecha: fecha,
                          titulo: 'Evento',
                          edicion: false,
                          clases: [
@@ -158,7 +243,8 @@ export default Ember.Component.extend({
         var eventoModificado = {
           'start': new Date(model.fecha),
           'content': model.titulo,
-          'className': clase
+          'className': clase,
+          'editable': false,
         };
 
         timeline.changeItem(row, eventoModificado);
@@ -167,15 +253,14 @@ export default Ember.Component.extend({
         var nuevoEvento = {
           'start': new Date(model.fecha),
           'content': model.titulo,
-          'className': clase
+          'className': clase,
+          'editable': false,
         };
 
-        timeline.addItem(nuevoEvento);
+        var a = timeline.addItem(nuevoEvento);
         timeline.setSelection([]);
       }
 
-      this.send('zoomReset');
-      this.send('zoomOut');
     },
     cancelarEventoForm: function() {
     },
@@ -205,7 +290,8 @@ export default Ember.Component.extend({
 
             require("fs").writeFile(nombre_archivo, base64Data, 'base64', function(err) {
               if (err) {
-                alert("Error " + err);
+                if (err.path !== "")
+                  alert("Error " + err);
               }
 
             });
