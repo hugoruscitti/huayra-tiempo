@@ -1,3 +1,9 @@
+huayra-tiempo (1:0.0.3) unstable; urgency=low
+
+  * Actualizando a la versión 0.0.3
+
+ -- Hugo Ruscitti <hugoruscitti@gmail.com>  Mon, 23 Feb 2015 16:31:20 +0100
+
 huayra-tiempo (0.2) unstable; urgency=low
 
   * Arreglos menores.
