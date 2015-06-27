@@ -1,11 +1,14 @@
 import Ember from 'ember';
+var fs = require('fs');
+
+var {$} = Ember;
 
 if (typeof links === 'undefined') {
-    links = {};
-    links.locales = {};
+    links = {locales: {}};
 } else if (typeof links.locales === 'undefined') {
     links.locales = {};
 }
+
 
 // Spanish ===================================================
 links.locales['es'] = {
@@ -65,8 +68,9 @@ export default Ember.Component.extend({
             self.timeline = timeline;
 
             window.onresize = function() {
-              if (self.timeline !== undefined)
+              if (self.timeline !== undefined) {
                 self.timeline.redraw();
+              }
             };
 
             var parent_handler = timeline.onMouseUp;
@@ -84,9 +88,11 @@ export default Ember.Component.extend({
               var selection = timeline.getSelection();
 
               if (selection.length > 0) {
+                var row;
+
                 if (selection.length) {
-                  if (selection[0].row != undefined) {
-                    var row = selection[0].row;
+                  if (selection[0].row !== undefined) {
+                    row = selection[0].row;
                   }
                 }
 
@@ -96,30 +102,25 @@ export default Ember.Component.extend({
                 }
 
               }
-            }
+            };
 
             timeline.onDblClick = function(event) {
-              var params = this.eventParams,
-                  options = this.options,
-                  dom = this.dom,
-                  size = this.size;
+              var params = this.eventParams;
+              var options = this.options;
+              var dom = this.dom;
+
               event = event || window.event;
 
               // get mouse position
               params.mouseX = links.Timeline.getPageX(event);
               params.mouseY = links.Timeline.getPageY(event);
               var x = params.mouseX - links.Timeline.getAbsoluteLeft(dom.content);
-              var y = params.mouseY - links.Timeline.getAbsoluteTop(dom.content);
 
               // create a new event at the current mouse position
               var xstart = this.screenToTime(x);
               if (options.snapEvents) {
                   this.step.snap(xstart);
               }
-
-              var content = options.NEW;
-              var group = this.getGroupFromHeight(y);   // (group may be undefined)
-              var preventRender = true;
 
               self.send('crearEvento', xstart);
 
@@ -171,7 +172,7 @@ export default Ember.Component.extend({
 
             //links.events.addListener(self.timeline, 'select', onSelect);
 
-            window.timeline = self.timeline;
+            this.set('timeline', self.timeline);
             window.data = data;
         }
 
@@ -184,17 +185,16 @@ export default Ember.Component.extend({
 
   actions: {
 
-      cambiarTitulo: function() {
-        this.set('modal', Em.View.views['titulo-form']);
-        this.get('modal').toggleVisibility(this, {focus: true});
-      },
-      guardar: function(modal, event) {
-      },
-      cancelar: function() {
-      },
+    cambiarTitulo() {
+      this.set('modal', Ember.View.views['titulo-form']);
+      this.get('modal').toggleVisibility(this, {focus: true});
+    },
 
+    guardar() {
+    },
 
-
+    cancelar() {
+    },
 
     crearEvento: function(fecha) {
       fecha = fecha || new Date();
@@ -210,7 +210,7 @@ export default Ember.Component.extend({
                          ]
                       });
 
-      this.set('modal', Em.View.views['evento-form']);
+      this.set('modal', Ember.View.views['evento-form']);
       this.get('modal').toggleVisibility(this, {focus: true});
     },
     editarEvento: function(data) {
@@ -227,15 +227,17 @@ export default Ember.Component.extend({
                           clase: {id: 1, text: data.item.className},
                         });
 
-      this.set('modal', Em.View.views['evento-form']);
+      this.set('modal', Ember.View.views['evento-form']);
       this.get('modal').toggleVisibility(this, {focus: true});
     },
-    guardarEventoForm: function(modal, event) {
+
+    guardarEventoForm: function() {
       var model = this.get('model');
       var clase = "default";
 
-      if (model.clase)
+      if (model.clase) {
         clase = model.clase.text;
+      }
 
       if (model.edicion) {
         var row = model.row;
@@ -247,7 +249,7 @@ export default Ember.Component.extend({
           'editable': false,
         };
 
-        timeline.changeItem(row, eventoModificado);
+        this.get('timeline').changeItem(row, eventoModificado);
 
       } else {
         var nuevoEvento = {
@@ -257,11 +259,12 @@ export default Ember.Component.extend({
           'editable': false,
         };
 
-        var a = timeline.addItem(nuevoEvento);
-        timeline.setSelection([]);
+        this.get('timeline').addItem(nuevoEvento);
+        this.get('timeline').setSelection([]);
       }
 
     },
+
     cancelarEventoForm: function() {
     },
 
@@ -280,18 +283,19 @@ export default Ember.Component.extend({
     },
 
     capture: function() {
-      $("#saveInput").change(function(evt) {
+      $("#saveInput").change(function() {
         var nombre_archivo = $(this).val();
 
         html2canvas($('#timeline'), {
           onrendered: function(canvas) {
-            var data = canvas.toDataURL()
+            var data = canvas.toDataURL();
             var base64Data = data.replace(/^data:image\/png;base64,/, "");
 
-            require("fs").writeFile(nombre_archivo, base64Data, 'base64', function(err) {
+            fs.writeFile(nombre_archivo, base64Data, 'base64', function(err) {
               if (err) {
-                if (err.path !== "")
+                if (err.path !== "") {
                   alert("Error " + err);
+                }
               }
 
             });

@@ -2,7 +2,10 @@
   "predef": [
     "document",
     "window",
-    "-Promise"
+    "-Promise",
+    "links",
+    "require",
+    "html2canvas"
   ],
   "browser": true,
   "boss": true,
