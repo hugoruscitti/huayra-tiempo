@@ -4,7 +4,8 @@ var fs = require('fs');
 var {$} = Ember;
 
 if (typeof links === 'undefined') {
-    links = {locales: {}};
+    window['links'] = {};
+    window['links'].locales = {};
 } else if (typeof links.locales === 'undefined') {
     links.locales = {};
 }
