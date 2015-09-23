@@ -1,0 +1,4 @@
+dist/* usr/share/huayra-tiempo/dist
+bin/huayra-tiempo usr/bin/
+debian/huayra-tiempo.desktop /usr/share/applications
+debian/huayra-tiempo.svg /usr/share/icons/hicolor/scalable/apps

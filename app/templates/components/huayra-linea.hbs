@@ -1,0 +1,89 @@
+<div class="row">
+  <a href class='btn btn-normal' {{action "guardarYRegresar"}}> Guardar y regresar</a>
+  <h3 {{action "cambiarTitulo"}} class='titulo'>{{lineaModel.titulo}}</h3>
+</div>
+
+
+<div class="row botonesEdicion">
+  <button class="btn btn-normal" {{action 'crearEvento'}}> <i class='glyphicon glyphicon-plus'></i> Crear un evento</button>
+  ||
+  <button class='btn btn-normal' {{action 'zoomOut'}}> <i class='glyphicon glyphicon-zoom-out'></i> </button>
+  <button class='btn btn-normal' {{action 'zoomReset'}}> <i class='glyphicon glyphicon-resize-horizontal'></i> </button>
+  <button class='btn btn-normal' {{action 'zoomIn'}}> <i class='glyphicon glyphicon-zoom-in'></i>  </button>
+  ||
+  <button class='btn btn-normal' {{action 'capture'}}> <i class='glyphicon glyphicon-camera'></i> Exportar </button>
+</div>
+
+<div id='timeline' class='row'>
+</div>
+
+
+<input id='saveInput' type="file" nwsaveas="linea_de_tiempo.png" />
+
+
+
+{{#if mostrarDialogoEvento}}
+  {{#modal-dialog close="cerrarDialogoEvento"
+                  targetAttachment="center"
+                  translucentOverlay=true}}
+
+                  {{#if model.edicion}}
+                    Edición de un Evento
+                  {{else}}
+                    Creación de un nuevo Evento
+                  {{/if}}
+
+                  <div class="form-group">
+                    <label class="control-label" for="titulo">Título</label>
+                    {{input class='form-control' id="titulo" autofocus=true value=model.titulo}}
+                  </div>
+
+                  <div class="form-group">
+                    <label class="control-label" for="fecha">Fecha</label>
+                    {{bootstrap-datepicker class='form-control' id='fecha' todayHighlight=true weekStart=1 language="es" value=model.fecha}}
+                  </div>
+
+
+                  <div class="form-group">
+                    <label class="control-label" for="clase">Clase</label>
+                    {{select-2
+                      class='form-control-expandido'
+                      content=model.clases
+                      placeholder="Seleccioná una clase"
+                      value=model.clase
+                    }}
+                  </div>
+
+                  <div class='modal-buttons'>
+                    {{#if model.edicion}}
+                      <button class='btn btn-normal' {{action "guardarEventoForm"}}>Guardar</button>
+                    {{else}}
+                      <button class='btn btn-normal' {{action "guardarEventoForm"}}>Crear</button>
+                    {{/if}}
+                  </div>
+
+  {{/modal-dialog}}
+{{/if}}
+
+
+
+
+
+
+
+{{#if mostrarDialogoTitulo}}
+  {{#modal-dialog close="cerrarDialogoTitulo"
+                  targetAttachment="center"
+                  translucentOverlay=true}}
+
+    <div class="form-group">
+      <label class="control-label" for="focusedInput">Título</label>
+      {{input class='form-control' id="name" autofocus=true value=lineaModel.titulo}}
+    </div>
+
+    <div class='modal-buttons'>
+      <button class='btn btn-normal' {{action "cerrarDialogoTitulo"}}>Guardar</button>
+    </div>
+
+  {{/modal-dialog}}
+{{/if}}

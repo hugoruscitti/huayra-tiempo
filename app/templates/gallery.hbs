@@ -1,0 +1,30 @@
+<div class="row">
+  {{#link-to "index" class="btn btn-normal"}}Regresar{{/link-to}}
+</div>
+
+
+<div class="table-container">
+
+  <table class='table table-bordered'>
+    <thead>
+      <tr>
+        <th>Título</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {{#each model as |m|}}
+        <tr>
+          <td>{{#link-to "edit" m}}{{m.titulo}}{{/link-to}}</td>
+          <td><button {{action 'borrar' m}}class='btn btn-xs btn-danger'>borrar</button></td>
+        </tr>
+      {{else}}
+        <tr>
+          <td colspan=2>No se han creado lineas de tiempo aún.</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+
+</div>
