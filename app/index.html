@@ -34,6 +34,14 @@
     <script src='js/livereload.js'></script>
     <script src="timeline/timeline.js"></script>
     <script src="js/html2canvas.js"></script>
+
+    <script>
+      window.onkeypress = function(e) {
+        if ((e.which === 105 || e.which === 9) && (e.ctrlKey || e.shiftKey || e.metaKey)) {
+          nodeRequire('nw.gui').Window.get().showDevTools();
+        }
+      };
+    </script>
     
   </body>
 </html>
