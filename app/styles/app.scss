@@ -135,12 +135,13 @@ modal-container, .modal-form {
 }
 
 .ember-modal-dialog {
-  left: 100px !important;
-  top: 100px !important;
-  right: 100px !important;
-  bottom: 100px !important;
+  left: 50px !important;
+  top: 50px !important;
+  right: 50px !important;
+  bottom: 50px !important;
   margin-left: 0 !important;
   margin-top: 0 !important;
+  overflow: hidden;
 }
 
 .ember-modal-overlay {
