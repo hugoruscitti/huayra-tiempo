@@ -1,1 +1,5 @@
-{{#huayra-linea lineaModel=model regresar='regresar'}}{{/huayra-linea}}
+{{#if model}}
+  {{#huayra-linea lineaModel=model regresar='regresar'}}{{/huayra-linea}}
+{{else}}
+  Cargando ...
+{{/if}}

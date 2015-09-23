@@ -1,5 +1,5 @@
 import Ember from 'ember';
-var fs = require('fs');
+var fs = nodeRequire('fs');
 
 var {$} = Ember;
 
@@ -173,11 +173,11 @@ export default Ember.Component.extend({
 
             //links.events.addListener(self.timeline, 'select', onSelect);
 
-            this.set('timeline', self.timeline);
             window.data = data;
         }
 
         drawVisualization();
+        this.set('timeline', timeline);
 
   }.on('didInsertElement'),
 
@@ -187,8 +187,15 @@ export default Ember.Component.extend({
   actions: {
 
     cambiarTitulo() {
-      this.set('modal', Ember.View.views['titulo-form']);
-      this.get('modal').toggleVisibility(this, {focus: true});
+      this.set('mostrarDialogoTitulo', true);
+    },
+
+    cerrarDialogoTitulo() {
+      this.set('mostrarDialogoTitulo', false);
+    },
+
+    cerrarDialogoEvento() {
+      this.set('mostrarDialogoEvento', false);
     },
 
     guardar() {
@@ -211,9 +218,9 @@ export default Ember.Component.extend({
                          ]
                       });
 
-      this.set('modal', Ember.View.views['evento-form']);
-      this.get('modal').toggleVisibility(this, {focus: true});
+      this.set('mostrarDialogoEvento', true);
     },
+
     editarEvento: function(data) {
       this.set('model', {fecha: data.item.start,
                          titulo: data.item.content,
@@ -228,8 +235,8 @@ export default Ember.Component.extend({
                           clase: {id: 1, text: data.item.className},
                         });
 
-      this.set('modal', Ember.View.views['evento-form']);
-      this.get('modal').toggleVisibility(this, {focus: true});
+
+      this.set('mostrarDialogoEvento', true);
     },
 
     guardarEventoForm: function() {
@@ -262,12 +269,12 @@ export default Ember.Component.extend({
 
         this.get('timeline').addItem(nuevoEvento);
         this.get('timeline').setSelection([]);
+
       }
 
+      this.set('mostrarDialogoEvento', false);
     },
 
-    cancelarEventoForm: function() {
-    },
 
     zoomOut: function() {
       this.timeline.zoom(-0.3);

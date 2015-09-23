@@ -14,7 +14,7 @@
     </thead>
 
     <tbody>
-      {{#each m in model}}
+      {{#each model as |m|}}
         <tr>
           <td>{{#link-to "edit" m}}{{m.titulo}}{{/link-to}}</td>
           <td><button {{action 'borrar' m}}class='btn btn-xs btn-danger'>borrar</button></td>

@@ -1,4 +1,4 @@
-VERSION=0.1.0
+VERSION=0.0.1
 NOMBRE="huayra-tiempo"
 
 N=[0m
@@ -15,33 +15,33 @@ comandos:
 	@echo "    ${G}iniciar${N}         Instala dependencias."
 	@echo "    ${G}compilar${N}        Genera los archivos compilados."
 	@echo "    ${G}compilar_live${N}   Compila de forma contínua."
-	@echo "    ${G}actualizar_css${N}  Instala/actualiza huayra-liso."
 	@echo ""
 	@echo "    ${G}ejecutar_linux${N}  Prueba la aplicacion sobre Huayra."
 	@echo "    ${G}ejecutar_mac${N}    Prueba la aplicacion sobre OSX."
+	@echo ""
+	@echo "    ${G}actualizar_tema${N} Descargar e inyecta el tema de huayra."
 	@echo ""
 	@echo "  ${Y}Para distribuir${N}"
 	@echo ""
 	@echo "    ${G}version${N}         Genera una nueva versión."
 	@echo "    ${G}subir_version${N}   Sube version generada al servidor."
+	@echo "    ${G}log${N}             Muestra los cambios desde el ultimo tag."
 	@echo "    ${G}publicar${N}        Publica el cambio para el paquete deb."
 	@echo "    ${G}crear_deb${N}       Genera el paquete deb para huayra."
 	@echo ""
 
 
 iniciar:
-	npm install
-	bower install
+	npm install --no-option
+	./node_modules/bower/bin/bower install
 
-ejecutar_linux:
+dist: compilar
+
+ejecutar_linux: 
 	nw dist
 
 ejecutar_mac:
 	/Applications/nwjs.app/Contents/MacOS/nwjs dist
-
-actualizar_css:
-	cp -r -f ../huayra-bootstrap-liso/destino/ public/huayra-liso
-	rm public/huayra-liso/index.html
 
 test_mac: ejecutar_mac
 
@@ -61,11 +61,13 @@ compilar_live:
 
 version:
 	# patch || minor
-	@bumpversion minor --current-version ${VERSION} package.json public/package.json Makefile app/templates/index.hbs --list
+	@bumpversion patch --current-version ${VERSION} package.json public/package.json Makefile --list
 	make build
 	@echo "Es recomendable escribir el comando que genera los tags y sube todo a github:"
 	@echo ""
-	@echo "make ver_sync"
+	@echo "make subir_version"
+
+ver_sync: subir_version
 
 subir_version:
 	git commit -am 'release ${VERSION}'
@@ -73,5 +75,23 @@ subir_version:
 	git push
 	git push --all
 	git push --tags
+
+actualizar_tema:
+	@echo "${G}Actualizando el tema${N}"
+	@rm -r -f master.zip
+	@wget https://github.com/hugoruscitti/huayra-bootstrap-liso/archive/master.zip
+	@unzip master.zip -d tmp_theme
+	@rm -r -f public/libs
+	@rm -r -f public/img
+	@rm -r -f public/fonts
+	@mv tmp_theme/huayra-bootstrap-liso-master/destino/libs public/
+	@mv tmp_theme/huayra-bootstrap-liso-master/destino/img public/
+	@mv tmp_theme/huayra-bootstrap-liso-master/destino/fonts public/
+	@mv tmp_theme/huayra-bootstrap-liso-master/destino/huayra-bootstrap.css public/
+	@rm -r -f master.zip
+	@rm -r -f tmp_theme
+
+log:
+	git log ${VERSION}...HEAD --graph --oneline --decorate
 
 .PHONY: dist

@@ -8,15 +8,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- AGREGADOS PARA NODEWEBKIT -->
-    <script src='reemplazar-require-paso-1.js'></script>
+    <script src='js/reemplazar-require-paso-1.js'></script>
+    <script src='js/atajo-inspector.js'></script>
 
     {{content-for 'head'}}
 
     <!-- AGREGADOS POR EMBERCLI -->
     <link rel="stylesheet" href="assets/vendor.css">
     <link rel="stylesheet" href="assets/huayra-tiempo.css">
-    <link rel="stylesheet" href="huayra-liso/huayra-bootstrap.css">
+    <link rel="stylesheet" href="huayra-bootstrap.css">
     <link rel="stylesheet" href="timeline/timeline.css">
+    {{content-for 'head-footer'}}
 
   </head>
   <body>
@@ -25,14 +27,13 @@
     <script src="assets/vendor.js"></script>
     <script src="assets/huayra-tiempo.js"></script>
 
+    {{content-for 'body-footer'}}
 
     <!-- AGREGADOS PARA NODEWEBKIT -->
-    <script src='reemplazar-require-paso-2.js'></script>
-    <script src='fix-menu-osx.js'></script>
-    <script src='livereload.js'></script>
-    <script src="huayra-liso/libs/bootstrap.min.js"></script>
+    <script src='js/fix-menu-osx.js'></script>
+    <script src='js/livereload.js'></script>
     <script src="timeline/timeline.js"></script>
     <script src="js/html2canvas.js"></script>
-
+    
   </body>
 </html>
