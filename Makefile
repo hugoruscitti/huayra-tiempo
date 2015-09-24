@@ -61,7 +61,7 @@ compilar_live:
 
 version:
 	# patch || minor
-	@bumpversion minor --current-version ${VERSION} public/package.json Makefile --list
+	@bumpversion minor --current-version ${VERSION} app/templates/index.hbs public/package.json Makefile --list
 	make build
 	@echo "Es recomendable escribir el comando que genera los tags y sube todo a github:"
 	@echo ""
