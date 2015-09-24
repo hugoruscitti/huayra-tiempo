@@ -3,21 +3,23 @@
 </div>
 
 
-<div class="table-container">
+<div class="table-proyectos">
 
-  <table class='table table-bordered'>
+  <table class='table table-bordered table-container'>
     <thead>
       <tr>
-        <th>Título</th>
-        <th>Acciones</th>
+        <th colspan=2>Proyectos existentes</th>
       </tr>
     </thead>
 
     <tbody>
       {{#each model as |m|}}
         <tr>
-          <td>{{#link-to "edit" m}}{{m.titulo}}{{/link-to}}</td>
-          <td><button {{action 'borrar' m}}class='btn btn-xs btn-danger'>borrar</button></td>
+          <td>
+          {{#link-to "edit" m class='table-proyectos-item'}}{{m.titulo}}{{/link-to}}
+          </td>
+
+          <td class='table-proyectos-acciones'><button {{action 'borrar' m}} class='btn white btn-xs btn-danger'>borrar</button></td>
         </tr>
       {{else}}
         <tr>

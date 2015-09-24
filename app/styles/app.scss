@@ -117,7 +117,7 @@ modal-container, .modal-form {
 
 .table-container {
   margin: 10px;
-  border: 2px solid rgb(221, 221, 221);
+  border: 2px solid rgb(221, 221, 221) !important;
 }
 
 .form-control-expandido {
@@ -146,4 +146,35 @@ modal-container, .modal-form {
 
 .ember-modal-overlay {
   z-index: 2000;
+}
+
+
+.table-proyectos {
+  width: 70%;
+  margin: auto;
+}
+
+.table-proyectos-item {
+  color: black !important;
+  text-decoration: none !important;
+
+  display: block;
+  padding: 6px;
+  margin: 0;
+}
+
+.table-proyectos-item:hover {
+  background-color: #ffb380;
+  color: white !important;
+}
+
+
+
+.table-proyectos-acciones {
+  width: 100px;
+  text-align: center;
+}
+
+.white {
+  color: white !important;
 }

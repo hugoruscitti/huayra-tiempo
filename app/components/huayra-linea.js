@@ -319,8 +319,9 @@ export default Ember.Component.extend({
     guardarYRegresar: function() {
       var record = this.get('lineaModel');
       record.set('datos_json', JSON.stringify(this.timeline.data));
-      record.save();
-      this.sendAction('regresar');
+      record.save().then(() => {
+        this.sendAction('regresar');
+      });
     }
   }
 });
